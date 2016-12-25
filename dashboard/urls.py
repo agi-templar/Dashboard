@@ -1,8 +1,10 @@
-
 from django.conf.urls import url
 from django.contrib import admin
 from dashboardapp import views
 from django.contrib.auth import views as auth_views
+
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
@@ -20,13 +22,11 @@ urlpatterns = [
         {'next_page': '/'},
         name = 'restaurant-sign-out'),
 
+    # SIGN UP ROUTES
+    url(r'^restaurant/sign-up', views.restaurant_sign_up,
+    name = 'restaurant-sign-up'),
+
     # RESTAURANT PAGE
     url(r'^restaurant/$', views.restaurant_home, name = 'restaurant-home')
 
-    # # SIGN UP ROUTES
-    # url(r'^restaurant/sign-up', views.restaurant_sign_up,
-    #     name = 'restaurant-sign-up'),
-    #
-    # # RESTAURANT HOME ROUTES
-    # url(r'^restaurant/$', views.restaurant_home, name = 'restaurant-home')
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
