@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home page</title>
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data">
+      <!-- Security Part -->
+      {% csrf_token %}
+      <!-- auth_views.login Django default version -->
+      {{ user_form }}
+      <!-- auth_views.login Django default version -->
+      {{ restaurant_form }}
+      <button type="submit">Sign Up</button>
+    </form>
+
+</body>
+</html>
