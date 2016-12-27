@@ -6,6 +6,8 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
 
+from dashboardapp import views, apis
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -31,6 +33,7 @@ urlpatterns = [
     url(r'^restaurant/order/$', views.restaurant_order, name = 'restaurant-order'),
     url(r'^restaurant/report/$', views.restaurant_report, name = 'restaurant-report'),
 
-
+    # For the api call
+    url(r'^api/customer/restaurants/$', apis.customer_get_restaurants),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
