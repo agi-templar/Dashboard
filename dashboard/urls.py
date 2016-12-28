@@ -36,4 +36,16 @@ urlpatterns = [
     # For the api call
     url(r'^api/customer/restaurants/$', apis.customer_get_restaurants),
 
+    # Notification
+    url(r'^api/restaurant/order/notification/(?P<last_request_time>.+)/$', apis.restaurant_order_notification),
+
+    # APIs for CUSTOMERS
+    url(r'^api/customer/restaurants/$', apis.customer_get_restaurants),
+    url(r'^api/customer/meals/(?P<restaurant_id>\d+)/$', apis.customer_get_meals),
+    url(r'^api/customer/order/add/$', apis.customer_add_order),
+    url(r'^api/customer/order/latest/$', apis.customer_get_latest_order),
+
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
