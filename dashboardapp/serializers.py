@@ -7,8 +7,6 @@ from dashboardapp.models import Restaurant, \
     Order, \
     OrderDetails
 
-from dashboardapp.models import Restaurant
-
 class RestaurantSerializer(serializers.ModelSerializer):
     logo = serializers.SerializerMethodField()
 
@@ -21,7 +19,6 @@ class RestaurantSerializer(serializers.ModelSerializer):
         model = Restaurant
         fields = ("id", "name", "phone", "address", "logo")
 
-
 class MealSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
 
@@ -31,8 +28,8 @@ class MealSerializer(serializers.ModelSerializer):
         return request.build_absolute_uri(image_url)
 
     class Meta:
-            model = Meal
-            fields = ("id", "name", "short_description", "image", "price")
+        model = Meal
+        fields = ("id", "name", "short_description", "image", "price")
 
 # ORDER SERIALIZER
 class OrderCustomerSerializer(serializers.ModelSerializer):
@@ -46,7 +43,7 @@ class OrderDriverSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source="user.get_full_name")
 
     class Meta:
-        model = Driver
+        model = Customer
         fields = ("id", "name", "avatar", "phone", "address")
 
 class OrderRestaurantSerializer(serializers.ModelSerializer):
