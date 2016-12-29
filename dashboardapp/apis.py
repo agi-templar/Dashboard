@@ -229,11 +229,15 @@ def driver_get_revenue(request):
 # POST - params: access_token, "lat,lng"
 @csrf_exempt
 def driver_update_location(request):
+    request.session.flush()
     if request.method == "POST":
         access_token = AccessToken.objects.get(token = request.POST.get("access_token"),
             expires__gt = timezone.now())
 
-        driver = access_token.user.driver
+        try:
+            driver = access_token.user.driver
+        except access_token.DoesNotExist:
+            driver = None
 
         # Set location string => database
         driver.location = request.POST["location"]

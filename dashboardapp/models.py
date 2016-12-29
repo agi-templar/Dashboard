@@ -27,6 +27,7 @@ class Driver(models.Model):
     avatar = models.CharField(max_length=500)
     phone = models.CharField(max_length=500, blank=True)
     address = models.CharField(max_length=500, blank=True)
+    location = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return self.user.get_full_name()
@@ -56,7 +57,6 @@ class Order(models.Model):
 
     customer = models.ForeignKey(Customer)
     restaurant = models.ForeignKey(Restaurant)
-    # You can create the order when the driver is null
     driver = models.ForeignKey(Driver, blank = True, null = True)
     address = models.CharField(max_length=500)
     total = models.IntegerField()

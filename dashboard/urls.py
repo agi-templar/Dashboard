@@ -44,6 +44,8 @@ urlpatterns = [
     url(r'^api/customer/meals/(?P<restaurant_id>\d+)/$', apis.customer_get_meals),
     url(r'^api/customer/order/add/$', apis.customer_add_order),
     url(r'^api/customer/order/latest/$', apis.customer_get_latest_order),
+    url(r'^api/customer/driver/location/$', apis.customer_driver_location),
+
 
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
