@@ -1,6 +1,7 @@
 {% extends 'restaurant/base.html' %}
 
 {% block script %}
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 {% endblock %}
 
@@ -13,7 +14,7 @@
             <div class="panel">
                 <div class="panel-heading bg-blue">
                   <h4 class="panel-title text-center text-white">
-                      Revenue by Week
+                      Time Spent on TV
                   </h4>
                 </div>
                 <div class="panel-body">
@@ -24,10 +25,34 @@
                             labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
                             datasets: [
                                 {
-                                    label: "Revenue by Week",
-                                    backgroundColor: "rgba(54,162,235,0.9)",
-                                    hoverBackgroundColor: "rgba(54,162,235,1)",
-                                    data: {{ revenue }}
+                                    label: "Time by Weekday",
+                                    backgroundColor: [
+                                          'rgba(255, 99, 132, 0.4)',
+                                          'rgba(54, 162, 235, 0.4)',
+                                          'rgba(255, 206, 86, 0.4)',
+                                          'rgba(75, 192, 192, 0.4)',
+                                          'rgba(153, 102, 255, 0.4)',
+                                          'rgba(255, 159, 64, 0.4)'
+                                      ],
+                                      borderColor: [
+                                          'rgba(255,99,132,1)',
+                                          'rgba(54, 162, 235, 1)',
+                                          'rgba(255, 206, 86, 1)',
+                                          'rgba(75, 192, 192, 1)',
+                                          'rgba(153, 102, 255, 1)',
+                                          'rgba(255, 159, 64, 1)'
+                                      ],
+                                    //backgroundColor: "rgba(54,162,235,0.9)",
+                                    hoverBackgroundColor: [
+                                          'rgba(255, 99, 132, 0.8)',
+                                          'rgba(54, 162, 235, 0.8)',
+                                          'rgba(255, 206, 86, 0.8)',
+                                          'rgba(75, 192, 192, 0.8)',
+                                          'rgba(153, 102, 255, 0.8)',
+                                          'rgba(255, 159, 64, 0.8)'
+                                      ],
+                                    data: [65, 59, 80, 81, 56, 55, 40],
+                                    //data: {{ revenue }}
                                 }
                             ]
                         };
@@ -45,29 +70,96 @@
             <div class="panel">
                 <div class="panel-heading bg-blue">
                   <h4 class="panel-title text-center text-white">
-                      Order by Week
+                      Real Time Home Temperature
                   </h4>
                 </div>
                 <div class="panel-body">
                     <canvas id="orderChart" height="110"></canvas>
                     <script>
-                        var ctx = document.getElementById("orderChart").getContext("2d");
-                        var data = {
-                            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-                            datasets: [
-                                {
-                                    label: "Revenue by Week",
-                                    backgroundColor: "rgba(255,99,132,0.9)",
-                                    hoverBackgroundColor: "rgba(255,99,132,1)",
-                                    data: {{ orders }}
-                                }
-                            ]
-                        };
+                        // var ctx = document.getElementById("orderChart").getContext("2d");
+                        // var data = {
+                        //     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                        //     datasets: [
+                        //         {
+                        //             label: "Revenue by Week",
+                        //             backgroundColor: "rgba(255,99,132,0.9)",
+                        //             hoverBackgroundColor: "rgba(255,99,132,1)",
+                        //             data: {{ orders }}
+                        //         }
+                        //     ]
+                        // };
+                        //
+                        // new Chart(ctx, {
+                        //   type: 'bar',
+                        //   data: data
+                        // });
+                                var counter = (function () {
+                                var n = 10;
 
-                        new Chart(ctx, {
-                          type: 'bar',
-                          data: data
-                        });
+                                return function () {
+                                    n++;
+
+                                    return n;
+                                };
+                            }());
+
+
+                            var queue = [];
+                            max = 85;
+                            min = 60;
+                            for (i = 0; i < 10; i++) {
+                                queue.push(Math.random() * (max - min) + min);
+                            }
+
+                            var queuelabels = [1,2,3,4,5,6,7,8,9,10];
+
+                            var config = {
+                                    type: 'line',
+                                    data: {
+                                        labels: queuelabels,
+                                        datasets: [{
+                                            backgroundColor: "rgba(75,192,192,0.4)",
+                                            borderColor: "rgba(75,192,192,1)",
+                                            borderCapStyle: 'butt',
+                                            label: "Temperature",
+                                            data: queue,
+
+                                        }]
+                                    },
+                                    options: {
+                                      animation: false,
+                                      scales: {
+                                            yAxes: [{
+                                              ticks: {
+                                                min: 0,
+                                                max: 100
+                                              }
+                                            }]
+                                        }
+                                    }
+                                };
+
+
+                            var ctx = document.getElementById("orderChart").getContext("2d");
+                            var myChart = new Chart(ctx, config);
+
+                            setInterval(function(){
+                              queue.push(Math.random() * (max - min) + min);
+                              queue.shift();
+
+                              queuelabels.push(counter());
+                              queuelabels.shift();
+
+                              myChart.data.datasets[0].data = queue;
+                              myChart.update();
+                              myChart.options.scales.yAxes[0].ticks.min = 0;
+                              myChart.options.scales.yAxes[0].ticks.max = 100;
+
+                              myChart.update();
+
+
+                            }, 1000);
+
 
                     </script>
                 </div>
@@ -81,7 +173,7 @@
           <div class="panel">
               <div class="panel-heading bg-blue">
                 <h4 class="panel-title text-center text-white">
-                    Top 3 Meals
+                    Top 5 Goods
                 </h4>
               </div>
               <div class="panel-body">
@@ -89,19 +181,27 @@
                   <script>
                       var ctx = document.getElementById("mealChart").getContext("2d");
                       var data = {
-                          labels: {{ meal.labels|safe }},
+                          //labels: {{ meal.labels|safe }},
+                          labels: [
+                               "Roku TV",
+                               "Electric Water Kettle",
+                               "Bread Machine",
+                               "Electric Radiator Heater",
+                               "Smart Oven"
+                           ],
                           datasets: [
                               {
                                   backgroundColor: [
-                                    "#36A2EB", "#FFCE56", "#FF6384"
+                                    "#36A2EB", "#4BC0C0", "#FF6384", "#E7E9ED", "#FFCE56",
                                   ],
-                                  data: {{ meal.data }}
+                                  //data: {{ meal.data }}
+                                  data: [300, 50, 100, 70, 200],
                               }
                           ]
                       };
 
                       new Chart(ctx, {
-                        type: 'pie',
+                        type: 'doughnut',
                         data: data
                       });
 
@@ -113,28 +213,60 @@
           <div class="panel">
               <div class="panel-heading bg-blue">
                 <h4 class="panel-title text-center text-white">
-                    Top 3 Drivers
+                    Smartiply Index
                 </h4>
               </div>
               <div class="panel-body">
                   <canvas id="driverChart" height="242"></canvas>
                   <script>
                       var ctx = document.getElementById("driverChart").getContext("2d");
+                      // var data = {
+                      //     labels: {{ driver.labels|safe }},
+                      //     datasets: [
+                      //         {
+                      //             backgroundColor: [
+                      //               "#36A2EB", "#FFCE56", "#FF6384"
+                      //             ],
+                      //             data: {{ driver.data }}
+                      //         }
+                      //     ]
+                      // };
                       var data = {
-                          labels: {{ driver.labels|safe }},
-                          datasets: [
-                              {
-                                  backgroundColor: [
-                                    "#36A2EB", "#FFCE56", "#FF6384"
-                                  ],
-                                  data: {{ driver.data }}
-                              }
-                          ]
-                      };
+                            labels: ["Eating", "Working", "Sleeping", "Outgoing", "Incoming", "Gaming", "Sporting"],
+                            datasets: [
+                                {
+                                    label: "Last Month",
+                                    backgroundColor: "rgba(179,181,198,0.2)",
+                                    borderColor: "rgba(179,181,198,1)",
+                                    pointBackgroundColor: "rgba(179,181,198,1)",
+                                    pointBorderColor: "#fff",
+                                    pointHoverBackgroundColor: "#fff",
+                                    pointHoverBorderColor: "rgba(179,181,198,1)",
+                                    data: [65, 59, 60, 81, 56, 55, 80]
+                                },
+                                {
+                                    label: "This Month",
+                                    backgroundColor: "rgba(255,99,132,0.2)",
+                                    borderColor: "rgba(255,99,132,1)",
+                                    pointBackgroundColor: "rgba(255,99,132,1)",
+                                    pointBorderColor: "#fff",
+                                    pointHoverBackgroundColor: "#fff",
+                                    pointHoverBorderColor: "rgba(255,99,132,1)",
+                                    data: [70, 48, 70, 88, 96, 60, 50]
+                                }
+                            ]
+                        };
 
                       new Chart(ctx, {
-                        type: 'pie',
-                        data: data
+                        type: 'radar',
+                        data: data,
+                        options: {
+                                  scale: {
+                                      ticks: {
+                                          beginAtZero: true
+                                      }
+                                  }
+                                }
                       });
 
                   </script>

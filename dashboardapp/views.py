@@ -79,7 +79,7 @@ def restaurant_order(request):
     if request.method == "POST":
         order = Order.objects.get(id = request.POST["id"], restaurant = request.user.restaurant)
 
-        if order.status == Order.COOKING:
+        if order.status == Order.PREPARING:
             order.status = Order.READY
             order.save()
 
